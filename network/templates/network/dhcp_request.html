@@ -1,0 +1,61 @@
+{% extends 'network/base.html' %}
+
+{% block title %}DHCP Request{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>DHCP IP Assignment Request</h2>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ form.mac_address.label_tag }}
+                {{ form.mac_address }}
+                <small class="form-text text-muted">Format: XX:XX:XX:XX:XX:XX</small>
+            </div>
+            <div class="mb-3">
+                {{ form.dhcp_version.label_tag }}
+                {{ form.dhcp_version }}
+            </div>
+            <button type="submit" class="btn btn-primary">Request IP</button>
+        </form>
+
+        {% if error %}
+        <div class="error-box">
+            <h4>Error</h4>
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
+
+        {% if result %}
+        <div class="result-box">
+            <h4>IP Assignment Successful!</h4>
+            <table class="table table-sm">
+                <tr>
+                    <th>MAC Address:</th>
+                    <td>{{ result.mac_address }}</td>
+                </tr>
+                <tr>
+                    <th>DHCP Version:</th>
+                    <td>{{ result.dhcp_version }}</td>
+                </tr>
+                <tr>
+                    <th>Assigned IP:</th>
+                    <td><strong>{{ result.assigned_ip }}</strong></td>
+                </tr>
+                <tr>
+                    <th>Lease Time:</th>
+                    <td>{{ result.lease_time }}</td>
+                </tr>
+                <tr>
+                    <th>MAC Sum Parity:</th>
+                    <td>{{ result.mac_sum_parity }}</td>
+                </tr>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
